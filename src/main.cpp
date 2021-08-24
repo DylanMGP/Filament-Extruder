@@ -72,19 +72,9 @@ AccelStepper stepper = AccelStepper(motorInterfaceType, stepPin, dirPin);
 
 MAX7219 max7219;
 
-void setup() {
-  Serial.begin(9600);
-  stepper.setEnablePin(enbPin);
-  stepper.setMaxSpeed(4000);
-  stepper.setSpeed(speed * stepPerMilimetre);
-  stepper.disableOutputs();
-  encButton.begin();
-  startButton.begin();
-  menuButton.begin();
-  max7219.Begin();
-
-  // These pieces of code convert a float into the form displayed by the max7219
-  String temp = String(speed, 4);
+// This converts a float into the form displayed by the max7219 and displays it
+void floatDisplay(float num) {
+  String temp = String(num, 4);
   char toDisplay[5];
   temp.toCharArray(toDisplay, temp.length());
   max7219.DisplayText(toDisplay, 1);
@@ -107,10 +97,7 @@ void menuDisplay() {
   if (editing && (optionPos == 0)) {
     max7219.DisplayText(controls[controlMode], 1);
   } else if (editing && (optionPos == 1)) {
-    String temp = String(stepPerMilimetre, 4);
-    char toDisplay[5];
-    temp.toCharArray(toDisplay, temp.length());
-    max7219.DisplayText(toDisplay, 1);
+    floatDisplay(stepPerMilimetre);
   } else {
     max7219.DisplayText(options[optionPos], 1);
   }
@@ -160,10 +147,7 @@ void menuMode() {
     inMenu = false;
     max7219.Clear();
 
-    String temp = String(speed, 4);
-    char toDisplay[5];
-    temp.toCharArray(toDisplay, temp.length());
-    max7219.DisplayText(toDisplay, 1);
+    floatDisplay(speed);
     // Serial.println("Running mode");
   }
 }
@@ -209,10 +193,7 @@ void changeSpeed() {
     stepper.setSpeed(speed * stepPerMilimetre);
     // Serial.println(speed, 4);
 
-    String temp = String(speed, 4);
-    char toDisplay[5];
-    temp.toCharArray(toDisplay, temp.length());
-    max7219.DisplayText(toDisplay, 1);
+    floatDisplay(speed);
   }
 }
 
@@ -231,6 +212,24 @@ void startStop() {
       // Serial.println("Stopping");
     }
   }
+}
+
+void setup() {
+  Serial.begin(9600);
+
+  // Start up the stepper, disable it at start
+  stepper.setEnablePin(enbPin);
+  stepper.setMaxSpeed(4000);
+  stepper.setSpeed(speed * stepPerMilimetre);
+  stepper.disableOutputs();
+
+  // Initialise interface elements
+  encButton.begin();
+  startButton.begin();
+  menuButton.begin();
+  max7219.Begin();
+
+  floatDisplay(speed);
 }
 
 void loop() {
