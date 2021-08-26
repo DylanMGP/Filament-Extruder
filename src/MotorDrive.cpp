@@ -29,14 +29,15 @@ void MotorDrive::startStop()
         stepper.disableOutputs();
     }
 }
-void MotorDrive::calibrate(float newStepPerMilimetre)
-{
-    stepPerMilimetre = newStepPerMilimetre;
-}
 void MotorDrive::setSpeed(float newSpeed)
 {
     speed = newSpeed;
     stepper.setSpeed(speed * stepPerMilimetre);
+}
+void MotorDrive::stop()
+{
+    stepper.disableOutputs();
+    running = false;
 }
 void MotorDrive::run()
 {

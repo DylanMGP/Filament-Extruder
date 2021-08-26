@@ -12,7 +12,7 @@ public:
     MotorDrive(int motorInterfaceType, int stepPin, int dirPin, int enbPin);
     void begin();
     void startStop();
-    void calibrate(float newStepPerMilimetre);
+    void stop();
     void setSpeed(float newSpeed);
     void run();
 
