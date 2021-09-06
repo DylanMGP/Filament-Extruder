@@ -9,10 +9,10 @@ Interface::Interface(uint8_t encAPin, uint8_t encBPin, uint8_t encButtonPin, uin
     , encButton(encButtonPin)
     , startButton(startPin)
     , menuButton(menuPin)
+    , oldPosition(0)
     , increments({0.1F, 0.01F, 0.001F})
     , incSize(sizeof(increments) / sizeof(float))
     , incPos(0)
-    , oldPosition(0)
     , inMenu(false)
     , editing(false)
     , options({"CONTROL", "CALIBRATE"})
@@ -25,6 +25,7 @@ Interface::Interface(uint8_t encAPin, uint8_t encBPin, uint8_t encButtonPin, uin
     , frameLength(sizeof(frames) / sizeof(char))
     , frameIndex(0)
 {};
+// Initializes the libraries for buttons, encoder and LED display.
 void Interface::begin()
 {
     encButton.begin();
@@ -32,20 +33,16 @@ void Interface::begin()
     menuButton.begin();
     max7219.Begin();
 }
+// Changes the increment of the encoder if the encoder button is pressed.
 void Interface::incChange()
 {
     if (encButton.pressed())
     {
-        if (incPos < (incSize - 1))
-            incPos++;
-        else
-        {
-            incPos = 0;
-        }
-        // Serial.println("New increment is: ");
-        // Serial.println(increments[incPos], 4);
+        if (incPos < (incSize - 1)) incPos++;
+        else incPos = 0;
     }
 }
+// Reads the state of the encoder. Returns 1 or -1 if moved in certain direction. Returns 0 if not.
 int Interface::readEncoder()
 {
     long newPosition = myEnc.read() / 4;
@@ -55,11 +52,9 @@ int Interface::readEncoder()
         oldPosition = newPosition;
         return direction;
     }
-    else
-    {
-        return 0;
-    }
+    else return 0;
 }
+// Formats a float into compatible Char array and displays with the MAX7219 library.
 void Interface::floatDisplay(float num)
 {
     String temp = String(num, 4);
@@ -67,6 +62,7 @@ void Interface::floatDisplay(float num)
     temp.toCharArray(toDisplay, temp.length());
     max7219.DisplayText(toDisplay, 1);
 }
+// Runs the "motor moving" animation
 void Interface::goAnimation()
 {
     unsigned long animTimer = millis();
@@ -77,26 +73,26 @@ void Interface::goAnimation()
 
         frameIndex++;
 
-        if (frameIndex < 0)
-        {
-            frameIndex = frameLength - 1;
-        }
-        else if (frameIndex >= frameLength)
-        {
-            frameIndex = 0;
-        }
+        if (frameIndex >= frameLength) frameIndex = 0;
 
         max7219.MAX7219_Write(8, frames[frameIndex]);
     }
 }
+// Handles all of the interface functions. Place in void loop().
 void Interface::runControls()
 {
-    startSig = false;
-    speedSig = false;
-    stepSig = false;
+    // These booleans "signal" to other classes if something needs to be done.
+    startSig = false;   // Start/toggle motor
+    speedSig = false;   // Change Speed
+    stepSig = false;    // Change steps per milimetre
+    stopSig  = false;   // Stop motor
+    // This is the increment to be applied to other classes. (E.g for MotorDrive::incSpeed() or MotorDrive::incSteps())
     increment = 0;
+
     Interface::incChange();
+
     int encDir = Interface::readEncoder();
+    // If the encoder has moved, edit some value
     if (encDir != 0)
     {
         if (inMenu)
@@ -106,35 +102,33 @@ void Interface::runControls()
                 if (optionPos == 0)
                 {
                     controlMode = 1 - controlMode; // Toggle between speed control and calliper control
+                    // Display the new control mode
                     max7219.Clear();
                     max7219.DisplayText(controls[controlMode], 1);
                 }
                 else if (optionPos == 1)
                 {
+                    // Signal that the stepPerMilimetre option needs to be changed, clear display ready to show new option
                     stepSig = true;
-                    increment = increments[incPos] * encDir; // Adjust the steps per millimeter used for speed calcs
+                    increment = increments[incPos] * encDir;
                     max7219.Clear();
                 }
             }
             else
             {
-                // Cycle through menu elements (allows for more than 2 elements)
+                // If we arent editing menu items, cycle through the menu (allows for more than 2 elements)
                 optionPos += encDir;
-
-                if (optionPos < 0)
-                {
-                    optionPos = optionSize - 1;
-                }
-                else if (optionPos >= optionSize)
-                {
-                    optionPos = 0;
-                }
+                // Make cycling the menu wrap around to the start
+                if (optionPos < 0) optionPos = optionSize - 1;
+                else if (optionPos >= optionSize) optionPos = 0;
+                // Display new menu item
                 max7219.Clear();
                 max7219.DisplayText(options[optionPos], 1);
             }
         }
         else
         {
+            // If we arent in the menu, signal that speed needs to be changed clear display ready for new value
             speedSig = true;
             increment = increments[incPos] * encDir;
             max7219.Clear();
@@ -142,27 +136,21 @@ void Interface::runControls()
     }
     else
     {
+        // If encoder hasn't moved, check if any buttons are pressed
         if (inMenu)
         {
+            // In the menu, the menu button selects a menu item to edit
             if (menuButton.pressed())
             {
                 editing = !editing;
+                // Display menu item or value to be edited
                 max7219.Clear();
-                if(editing && (optionPos == 0))
-                {
-                    max7219.DisplayText(controls[controlMode], 1);
-                }
-                else if (editing && (optionPos == 1))
-                {
-                    stepSig = true;
-                }
-                else
-                {
-                    max7219.DisplayText(options[optionPos], 1);
-                }
-                
+                if(editing && (optionPos == 0)) max7219.DisplayText(controls[controlMode], 1);
+                else if (editing && (optionPos == 1)) stepSig = true;
+                else max7219.DisplayText(options[optionPos], 1);
             }
-            if (startButton.pressed())
+            // In the menu, the start button exits out of the menu
+            else if (startButton.pressed())
             {
                 editing = false;
                 inMenu = false;
@@ -172,13 +160,13 @@ void Interface::runControls()
         }
         else
         {
-            if (startButton.pressed())
-            {
-                startSig = true;
-            }
+            // Out of the menu, the start button toggles the motors
+            if (startButton.pressed()) startSig = true;
+            // Out of the menu, the menu button stops the motors and enters the menu
             else if (menuButton.pressed())
             {
                 inMenu = true;
+                stopSig = true;
                 max7219.Clear();
                 max7219.DisplayText(options[optionPos], 1);
             }

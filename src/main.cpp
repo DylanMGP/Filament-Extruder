@@ -35,47 +35,13 @@ Libraries used:
 #define startButt 9
 #define menuButt 8
 
+
 MotorDrive stepperMotor = MotorDrive(motorInterfaceType, stepPin, dirPin, enbPin);
 Interface interface = Interface(encPinA, encPinB, encButt, startButt, menuButt);
 
-// animation parameters
-// const int waitTime = 100;
-// char frames[] = {0b1000000, 0b0100000, 0b0010000, 0b0001000, 0b0000100, 0b0000010};
-// int frameLength = sizeof(frames) / sizeof(char);
-// int frameIndex = 0;
-// unsigned long animTimerOld;
-
-MAX7219 max7219;
-
-// Handles the animation when the extruder is running
-// void goAnimation()
-// {
-//     unsigned long animTimer = millis();
-
-//     if (animTimer - animTimerOld >= waitTime)
-//     {
-//         animTimerOld = animTimer;
-
-//         frameIndex++;
-
-//         if (frameIndex < 0)
-//         {
-//             frameIndex = frameLength - 1;
-//         }
-//         else if (frameIndex >= frameLength)
-//         {
-//             frameIndex = 0;
-//         }
-
-//         max7219.MAX7219_Write(8, frames[frameIndex]);
-//     }
-// }
-
-
-
 void setup()
 {
-    Serial.begin(9600);
+    // Serial.begin(9600);
 
     stepperMotor.begin();
     interface.begin();
@@ -85,6 +51,8 @@ void setup()
 void loop()
 {
     interface.runControls();
+
+    // If the interface has "signalled" if a change is needed, do the change
     if (interface.startSig)
     {
         stepperMotor.startStop();
@@ -99,9 +67,15 @@ void loop()
         stepperMotor.incSteps(interface.increment);
         interface.floatDisplay(stepperMotor.stepPerMilimetre);
     }
+    else if (interface.stopSig)
+    {
+        stepperMotor.stop();
+    }
+    
    
     stepperMotor.run();
 
+    // Run the animation if the motor is moving
     if(stepperMotor.running)
     {
         interface.goAnimation();

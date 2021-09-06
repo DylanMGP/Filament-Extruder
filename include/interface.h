@@ -6,6 +6,10 @@
 #include <max7219.h>
 #include <Encoder.h>
 
+/*
+    interface.h - Class which handles all the behaviours of the interface.
+*/
+
 class Interface
 {
 private:
@@ -21,12 +25,12 @@ private:
     int optionPos;
     const int optionSize;
     int controlMode;
-    MAX7219 max7219;
     const int waitTime;
     char frames[6];
     int frameLength;
     int frameIndex;
     unsigned long animTimerOld;
+    MAX7219 max7219;
 public:
     Interface(uint8_t encAPin, uint8_t encBPin, uint8_t encButtonPin, uint8_t startPin, uint8_t menuPin);
     Button encButton;
@@ -40,6 +44,7 @@ public:
     bool startSig;
     bool speedSig;
     bool stepSig;
+    bool stopSig;
     float increment;
     void runControls();
 };
