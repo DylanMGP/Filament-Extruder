@@ -14,7 +14,7 @@ void MotorDrive::begin()
 {
     stepPerMilimetre = 34.00;
     running = false;
-    speed = 3.00;
+    speed = 3.00; // in mm/s
     stepper.setMaxSpeed(4000);
     stepper.setSpeed(speed * stepPerMilimetre);
     stepper.disableOutputs();

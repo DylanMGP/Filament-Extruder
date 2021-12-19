@@ -14,10 +14,8 @@ Name: Glass filament Extruder program
 Author: Mackinley Shaw
 Email: mackshaw@iinet.net.au
 Purpose: Includes all the programming for the glass filament extruder device. Allows
-the user to select either a pulling speed or intended diameter to control the speed of
-the extrider steppers.
-Libraries used:
-- TBD
+the user to select either a pulling speed or intended diameter (Currently Unimplemented) to control the speed of
+the extruder steppers.
 */
 
 // Define pins and values for driving the stepper motors:
