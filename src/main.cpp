@@ -18,6 +18,15 @@ the user to select either a pulling speed or intended diameter (Currently Unimpl
 the extruder steppers.
 */
 
+// TODO: Change the pins used for the interface: 
+//      Encoder -> D2,D3 
+//      Encoder Button -> D8
+//      Display -> A0,A1,A2
+//      Stop Button -> D9
+// TODO: Remove the options feature, just have speed control
+// TODO: Check licences, rewrite anything that we cant use
+// TODO: Fix the floating pont integer issue
+
 // Define pins and values for driving the stepper motors:
 #define enbPin 3
 #define dirPin 4
