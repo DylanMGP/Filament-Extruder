@@ -29,7 +29,6 @@ the extruder steppers.
 // TODO: Fix the floating pont integer issue
 
 // Define pins and values for driving the stepper motors:
-#define enbPin 3
 #define dirPin 4
 #define stepPin 5
 #define motorInterfaceType 1
@@ -44,7 +43,7 @@ the extruder steppers.
 #define menuButt 8 // Soon to be depreciated
 
 
-MotorDrive stepperMotor = MotorDrive(motorInterfaceType, stepPin, dirPin, enbPin);
+MotorDrive stepperMotor = MotorDrive(motorInterfaceType, stepPin, dirPin);
 Interface interface = Interface(encPinA, encPinB, encButt, startButt, menuButt);
 
 void setup()

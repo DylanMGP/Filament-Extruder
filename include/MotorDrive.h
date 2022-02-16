@@ -9,7 +9,7 @@ class MotorDrive
 private:
     AccelStepper stepper;
 public:
-    MotorDrive(int motorInterfaceType, int stepPin, int dirPin, int enbPin);
+    MotorDrive(int motorInterfaceType, int stepPin, int dirPin);
     float stepPerMilimetre;
     bool running;
     float speed;

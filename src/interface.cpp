@@ -4,11 +4,6 @@
 #include <max7219.h>
 #include <Encoder.h>
 
-// TODO: Change the pins used for the interface
-// TODO: Remove the options feature, just have speed control
-// TODO: Check licences, rewrite anything that we cant use
-// TODO: Fix the floating pont integer issue
-
 Interface::Interface(uint8_t encAPin, uint8_t encBPin, uint8_t encButtonPin, uint8_t startPin, uint8_t menuPin)
     : myEnc(encAPin, encBPin)
     , encButton(encButtonPin)
@@ -83,6 +78,7 @@ void Interface::goAnimation()
         max7219.MAX7219_Write(8, frames[frameIndex]);
     }
 }
+// TODO: This is where the menu needs to be removed.
 // Handles all of the interface functions. Place in void loop().
 void Interface::runControls()
 {
