@@ -27,11 +27,13 @@ void Interface::begin()
 // Changes the increment of the encoder if the encoder button is pressed.
 void Interface::incChange()
 {
+    
     if (encButton.pressed())
     {
         if (incPos < (incSize - 1)) incPos++;
         else incPos = 0;
     }
+    
 }
 // Reads the state of the encoder. Returns 1 or -1 if moved in certain direction. Returns 0 if not.
 int Interface::readEncoder()

@@ -29,8 +29,8 @@ the extruder steppers.
 // TODO: Fix the floating pont integer issue
 
 // Define pins and values for driving the stepper motors:
-#define dirPin 4
-#define stepPin 5
+#define dirPin 6
+#define stepPin 7
 #define motorInterfaceType 1
 #define DMODE_0          12
 #define DMODE_1          11
@@ -51,7 +51,7 @@ Interface interface = Interface(encPinA, encPinB, encButt, startButt);
 
 void setup()
 {
-    // Serial.begin(9600);
+    //Serial.begin(9600);
 
     stepperMotor.begin();
     interface.begin();
@@ -72,16 +72,12 @@ void loop()
     if (interface.startSig)
     {
         stepperMotor.startStop();
+        //Serial.println("beep");
     }
     else if (interface.speedSig)
     {
         stepperMotor.incSpeed(interface.increment);
         interface.floatDisplay(stepperMotor.speed);
-    }
-    else if (interface.stepSig)
-    {
-        stepperMotor.incSteps(interface.increment);
-        interface.floatDisplay(stepperMotor.stepPerMilimetre);
     }
     else if (interface.stopSig)
     {
