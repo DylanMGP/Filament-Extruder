@@ -47,9 +47,9 @@
 
 #define INTENSITY_MIN     0x00                       
 #define INTENSITY_MAX     0x0f                      
-#define MAX_CLK A0
+#define MAX_CLK A2
 #define MAX_CS A1
-#define MAX_DIN A2
+#define MAX_DIN A0
 
 /*
 *********************************************************************************************************

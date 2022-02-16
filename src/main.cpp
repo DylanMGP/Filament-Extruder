@@ -16,13 +16,14 @@ Email: mackshaw@iinet.net.au
 Purpose: Includes all the programming for the glass filament extruder device. Allows
 the user to select either a pulling speed or intended diameter (Currently Unimplemented) to control the speed of
 the extruder steppers.
-*/
+*/ 
 
 // TODO: Change the pins used for the interface: 
 //      Encoder -> D2,D3 
 //      Encoder Button -> D8
-//      Display -> A0,A1,A2
+//      Display -> A0,A1,A2 Changing these is painful, you need to do it within the library
 //      Stop Button -> D9
+//      Driver Pins?
 // TODO: Remove the options feature, just have speed control
 // TODO: Check licences, rewrite anything that we cant use
 // TODO: Fix the floating pont integer issue
@@ -34,13 +35,13 @@ the extruder steppers.
 #define motorInterfaceType 1
 
 // Define pins for interface
-#define encPinA 11
-#define encPinB 12
+#define encPinA 2
+#define encPinB 3
 
 // Define button pins
-#define encButt 10
+#define encButt 8
 #define startButt 9
-#define menuButt 8
+#define menuButt 8 // Soon to be depreciated
 
 
 MotorDrive stepperMotor = MotorDrive(motorInterfaceType, stepPin, dirPin, enbPin);
