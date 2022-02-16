@@ -14,13 +14,6 @@ void MotorDrive::begin()
     stepPerMilimetre = 34.00;
     running = false;
     speed = 3.00; // in mm/s
-    // Set the microstepping for the drivers
-    pinMode(12, OUTPUT);
-    pinMode(11, OUTPUT);    
-    pinMode(10, OUTPUT);
-    digitalWrite(12, HIGH);
-    digitalWrite(11, HIGH);
-    digitalWrite(10, LOW);
     stepper.setMaxSpeed(4000);
     stepper.setSpeed(speed * stepPerMilimetre);
     stepper.disableOutputs();

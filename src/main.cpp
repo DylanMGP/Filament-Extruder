@@ -32,6 +32,9 @@ the extruder steppers.
 #define dirPin 4
 #define stepPin 5
 #define motorInterfaceType 1
+#define DMODE_0          12
+#define DMODE_1          11
+#define DMODE_2          10
 
 // Define pins for interface
 #define encPinA 2
@@ -40,11 +43,11 @@ the extruder steppers.
 // Define button pins
 #define encButt 8
 #define startButt 9
-#define menuButt 8 // Soon to be depreciated
+//#define menuButt 8 // Soon to be depreciated
 
 
 MotorDrive stepperMotor = MotorDrive(motorInterfaceType, stepPin, dirPin);
-Interface interface = Interface(encPinA, encPinB, encButt, startButt, menuButt);
+Interface interface = Interface(encPinA, encPinB, encButt, startButt);
 
 void setup()
 {
@@ -53,6 +56,12 @@ void setup()
     stepperMotor.begin();
     interface.begin();
     interface.floatDisplay(stepperMotor.speed);
+    pinMode(DMODE_0, OUTPUT);
+    pinMode(DMODE_1, OUTPUT);
+    pinMode(DMODE_2, OUTPUT);
+    digitalWrite(DMODE_0, HIGH);
+    digitalWrite(DMODE_1, HIGH);
+    digitalWrite(DMODE_2, LOW);
 }
 
 void loop()

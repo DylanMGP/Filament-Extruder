@@ -18,13 +18,6 @@ private:
     const float increments[3];
     const int incSize;
     int incPos;
-    bool inMenu;
-    bool editing;
-    char options[2][12];
-    char controls[2][12];
-    int optionPos;
-    const int optionSize;
-    int controlMode;
     const int waitTime;
     char frames[6];
     int frameLength;
@@ -32,10 +25,9 @@ private:
     unsigned long animTimerOld;
     MAX7219 max7219;
 public:
-    Interface(uint8_t encAPin, uint8_t encBPin, uint8_t encButtonPin, uint8_t startPin, uint8_t menuPin);
+    Interface(uint8_t encAPin, uint8_t encBPin, uint8_t encButtonPin, uint8_t startPin);
     Button encButton;
     Button startButton;
-    Button menuButton;
     void begin();
     void incChange();
     int readEncoder();
