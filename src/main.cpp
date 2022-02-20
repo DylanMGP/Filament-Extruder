@@ -43,6 +43,7 @@ the extruder steppers.
 // Define button pins
 #define encButt 8
 #define startButt 9
+#define startButtLED 5
 //#define menuButt 8 // Soon to be depreciated
 
 
@@ -55,13 +56,24 @@ void setup()
 
     stepperMotor.begin();
     interface.begin();
+
+    // Branding
+    interface.max7219.DisplayText("MGP", 0);
+    delay(3000);
+    interface.max7219.Clear();
     interface.floatDisplay(stepperMotor.speed);
+
+    // These ensure the correct stepping mode of the drivers
     pinMode(DMODE_0, OUTPUT);
     pinMode(DMODE_1, OUTPUT);
     pinMode(DMODE_2, OUTPUT);
     digitalWrite(DMODE_0, HIGH);
     digitalWrite(DMODE_1, HIGH);
     digitalWrite(DMODE_2, LOW);
+
+    // Button LED is on while the device is stopped
+    pinMode(startButtLED, OUTPUT);
+    digitalWrite(startButtLED, HIGH);
 }
 
 void loop()
@@ -73,6 +85,16 @@ void loop()
     {
         stepperMotor.startStop();
         //Serial.println("beep");
+
+        // Toggle the LED of the button to show if started or stopped
+        if(stepperMotor.running)
+        {
+            digitalWrite(startButtLED, LOW);
+        }
+        else
+        {
+            digitalWrite(startButtLED, HIGH);
+        }
     }
     else if (interface.speedSig)
     {

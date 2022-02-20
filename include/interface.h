@@ -23,11 +23,11 @@ private:
     int frameLength;
     int frameIndex;
     unsigned long animTimerOld;
-    MAX7219 max7219;
 public:
     Interface(uint8_t encAPin, uint8_t encBPin, uint8_t encButtonPin, uint8_t startPin);
     Button encButton;
     Button startButton;
+    MAX7219 max7219;
     void begin();
     void incChange();
     int readEncoder();
