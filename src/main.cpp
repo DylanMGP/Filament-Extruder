@@ -57,8 +57,8 @@ void setup()
     stepperMotor.begin();
     interface.begin();
 
-    // Branding
-    interface.max7219.DisplayText("MGP", 0);
+    // Show SPEED at start
+    interface.max7219.DisplayText("SPEED", 0);
     delay(3000);
     interface.max7219.Clear();
     interface.floatDisplay(stepperMotor.speed);
