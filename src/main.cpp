@@ -51,7 +51,7 @@ the extruder steppers.
 // Define cutter parameters
 #define servoPin 4
 #define CHECKING_INTERVAL 500
-#define FILAMENT_LENGTH 1000
+#define FILAMENT_LENGTH 1000 // mm
 
 
 MotorDrive stepperMotor = MotorDrive(motorInterfaceType, stepPin, dirPin, enablePin);
@@ -65,6 +65,8 @@ void setup()
     stepperMotor.begin();
     interface.begin();
     cutter.begin();
+
+    cutter.setSpeed(stepperMotor.speed);
 
     // Show SPEED at start
     // interface.max7219.DisplayText("SPEED", 0);
@@ -121,6 +123,7 @@ void loop()
     else if (interface.stopSig)
     {
         stepperMotor.stop();
+        cutter.stop();
     }
     
    
