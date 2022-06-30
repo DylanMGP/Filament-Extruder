@@ -15,7 +15,7 @@ void Cutter::begin(){
     myservo.write(160);
     extrudeSpeed = 5.80f;
     filamentRemaining = (float)filamentLength;
-    prevCheckTime = millis();
+    // prevCheckTime = millis();
 }
 
 // Call this whenever the extruder speed changes to update the speed
@@ -47,18 +47,18 @@ void Cutter::cutFilament(){
 // Runs the cutting operation. delay between close and open is non-blocking, so it shouldnt affect the stepper timings
 void Cutter::runCut(){
     if(cut){
-        unsigned long currCheckTime = millis();
-        
-        if(!cutterOpen){
-            myservo.write(180);
-            prevCutTime = currCheckTime;
-            cutterOpen = true;
-        }
-        else if(currCheckTime - prevCutTime > 50){ // return the cutter after a small, non-blocking delay
-            myservo.write(160);
-            cutterOpen = false;
-            cut = false;
-        }
+      unsigned long currCutTime = millis();
+
+      if (!cutterOpen) {
+        myservo.write(180);
+        prevCutTime = currCutTime;
+        cutterOpen = true;
+        // return the cutter after a small, non-blocking delay
+      } else if (currCutTime - prevCutTime > 500) {
+        myservo.write(160);
+        cutterOpen = false;
+        cut = false;
+      }
     }
 }
 
@@ -69,15 +69,18 @@ void Cutter::run(){
 
         // Check and update extruded length on the interval we set
         if((currCheckTime - prevCheckTime) > checkingInterval){
-            filamentRemaining -= extrudeSpeed * (checkingInterval/1000); // mm/s * s = mm
+          // mm/s * s = mm
+          filamentRemaining -= extrudeSpeed * (checkingInterval / 1000.0f);
+          //   Serial.print("Checked at: ");
+          //   Serial.println(filamentRemaining);
 
-            prevCheckTime = currCheckTime;
-            
-            // When it's long enough, cut it
-            if(filamentRemaining < 0){
-                Cutter::cutFilament();
-                filamentRemaining = (float)filamentLength;
-            }
+          prevCheckTime = currCheckTime;
+
+          // When it's long enough, cut it
+          if (filamentRemaining < 0) {
+            Cutter::cutFilament();
+            filamentRemaining = (float)filamentLength;
+          }
         }
     }
 

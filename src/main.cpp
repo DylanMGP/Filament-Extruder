@@ -60,36 +60,39 @@ Cutter cutter = Cutter(servoPin, CHECKING_INTERVAL, FILAMENT_LENGTH);
 
 void setup()
 {
-    //Serial.begin(9600);
+  // Serial.begin(9600);
 
-    stepperMotor.begin();
-    interface.begin();
-    cutter.begin();
+  stepperMotor.begin();
+  interface.begin();
+  cutter.begin();
 
-    cutter.setSpeed(stepperMotor.speed);
+  cutter.setSpeed(stepperMotor.speed);
 
-    // Show SPEED at start
-    // interface.max7219.DisplayText("SPEED", 0);
-    // delay(3000);
-    interface.max7219.Clear();
-    interface.floatDisplay(stepperMotor.speed);
+  // Show SPEED at start
+  // interface.max7219.DisplayText("SPEED", 0);
+  // delay(3000);
+  interface.max7219.Clear();
+  interface.floatDisplay(stepperMotor.speed);
 
-    // These ensure the correct stepping mode of the drivers
-    // pinMode(DMODE_0, OUTPUT);
-    // pinMode(DMODE_1, OUTPUT);
-    // pinMode(DMODE_2, OUTPUT);
-    // digitalWrite(DMODE_0, HIGH);
-    // digitalWrite(DMODE_1, HIGH);
-    // digitalWrite(DMODE_2, LOW);
+  // These ensure the correct stepping mode of the drivers
+  // pinMode(DMODE_0, OUTPUT);
+  // pinMode(DMODE_1, OUTPUT);
+  // pinMode(DMODE_2, OUTPUT);
+  // digitalWrite(DMODE_0, HIGH);
+  // digitalWrite(DMODE_1, HIGH);
+  // digitalWrite(DMODE_2, LOW);
 
-    //Dylan Trying this
-    pinMode(dirPin, OUTPUT);
-    pinMode(stepPin, OUTPUT);
-    pinMode(enablePin, OUTPUT);
+  // Dylan Trying this
+  pinMode(dirPin, OUTPUT);
+  pinMode(stepPin, OUTPUT);
+  pinMode(enablePin, OUTPUT);
 
-    // Button LED is on while the device is stopped
-    pinMode(startButtLED, OUTPUT);
-    digitalWrite(startButtLED, HIGH);
+  // Button LED is on while the device is stopped
+  pinMode(startButtLED, OUTPUT);
+  digitalWrite(startButtLED, HIGH);
+  // Serial.println("testing");
+  // Serial.println(1234);
+  //   cutter.start(); // Testing without the extruder on hand
 }
 
 void loop()
