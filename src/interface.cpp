@@ -50,9 +50,9 @@ int Interface::readEncoder()
 // Formats a float into compatible Char array and displays with the MAX7219 library.
 void Interface::floatDisplay(float num)
 {
-    String temp = String(num, 4);
-    char toDisplay[5];
-    temp.toCharArray(toDisplay, temp.length());
+    String temp = String(num, 3);
+    char toDisplay[8];
+    temp.toCharArray(toDisplay, 8);
     max7219.DisplayText(toDisplay, 1);
 }
 // Runs the "motor moving" animation

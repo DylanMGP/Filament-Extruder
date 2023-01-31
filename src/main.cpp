@@ -75,12 +75,12 @@ void setup()
   interface.floatDisplay(stepperMotor.speed);
 
   // These ensure the correct stepping mode of the drivers
-  // pinMode(DMODE_0, OUTPUT);
-  // pinMode(DMODE_1, OUTPUT);
-  // pinMode(DMODE_2, OUTPUT);
-  // digitalWrite(DMODE_0, HIGH);
-  // digitalWrite(DMODE_1, HIGH);
-  // digitalWrite(DMODE_2, LOW);
+  pinMode(DMODE_0, OUTPUT);
+  pinMode(DMODE_1, OUTPUT);
+  pinMode(DMODE_2, OUTPUT);
+  digitalWrite(DMODE_0, LOW);
+  digitalWrite(DMODE_1, LOW);
+  digitalWrite(DMODE_2, HIGH);
 
   // Dylan Trying this
   pinMode(dirPin, OUTPUT);
